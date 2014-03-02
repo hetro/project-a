@@ -1,0 +1,37 @@
+<script type="text/javascript">
+  $(function() {
+    $( "#datepicker" ).datepicker({
+		dateFormat: "yy-mm-dd",
+		onSelect : function(dateStr){
+			//console.log(dateStr);
+			$.get('<?=$this->url('calendar/action',array('action' => 'getCalendarEvents'))?>',{ date : dateStr },function(data){  $(".results").html(data)});
+
+		}
+	});
+	
+	$.get('<?=$this->url('calendar/action',array('action' => 'getCalendarEvents'))?>',{ date : '<?php $tmp = new \DateTime("now"); echo $tmp->format('Y-m-d')?>' },function(data){  $(".results").html(data)});
+  });
+  </script>
+
+
+
+<div class="row">
+	<div class="col-xs-12 col-sm-3">
+    	<div id="datepicker"></div>
+    </div>
+     
+	 <div class="col-xs-12 col-sm-9">
+    <a href="<?=$this->url('event/action', array( 'action' => 'request'))?>">
+    <span class="btn btn-success fileinput-button btn-xs">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Request New Event</span>
+    </span></a>
+    </div>
+    <div class="col-xs-12 col-sm-9 results">
+    	
+    	Loading
+
+    	<!--<tr><td></td></tr>-->
+    
+    </div>
+</div>

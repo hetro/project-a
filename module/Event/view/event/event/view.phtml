@@ -1,0 +1,149 @@
+<?php $this->headScript()->prependFile($this->basePath() . '/js/jquery.print.js')?>
+<script type="text/javascript">
+$(function(){
+	$("#print").click(function(){	$(".printable").print()});	
+	
+});
+</script>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+    <?php if($this->isAllowed('event', 'add-report')) : ?>
+    <a href="<?=$this->url('event/action', array( 'action' => 'add-event-report' , 'id' => $entry->getId() ))?>">
+    <span class="btn btn-success fileinput-button btn-xs">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Add Event Report</span>
+    </span></a>
+    <?php endif; ?>
+    <?php if($this->isAllowed('event', 'print')) : ?>
+    <span id="print" class="btn btn-success fileinput-button btn-xs">
+        <i class="glyphicon glyphicon-print"></i>
+        <span>Print</span>
+    </span>
+    <?php endif;?>
+	<div class="printable">
+    <table class="table">
+    	<tr>
+        	<td>Title <span class="label label-success" style="font-size:16px;"><?=$entry->getEventTitle()?></span><br />
+			<br />Venue <span class="label label-default"><?=$entry->getVenue()?></span> 
+            </td>
+            <td align="right">Date Requested <span class="label label-default"><?=$entry->getDateCreated()->format('M d, Y h:i A')?></span> Status <span class="label <?=($entry->getStatus()=='Approved'?' label-success':' label-warning')?>"><?=$entry->getStatus()?> <?php if($entry->getStatus()=='Approved') : ?> by <?=$entry->getReviewedBy()->getDisplayName()?><?php endif; ?></span>
+            <br />
+            Admin Notes : <br />
+            <?=nl2br($entry->getNotes())?>
+            </td>
+        </tr>
+        <tr>
+        	<td colspan="2"><span class="label label-warning">Start of Event</span> <?=$entry->getStartOfEvent()->format('M d, Y h:i A')?>
+            	<br /> <span class="label label-warning">End of Event</span> <?=$entry->getEndOfEvent()->format('M d, Y h:i A')?>
+            </td>
+        </tr>
+        <tr>
+        	<td colspan="2">
+            <span class="label label-default">Fullname</span> <?=$entry->getFullname()?> <br />
+            <span class="label label-default">Company</span> <?=$entry->getCompany()?> <br />
+			<span class="label label-default">Position</span> <?=$entry->getPosition()?> <br />
+            <span class="label label-default">Address</span> <?=$entry->getAddress()?> <br />
+            <span class="label label-default">Contact</span> <?=$entry->getContact()?> <br />
+            <span class="label label-default">Purpose</span> <br /><?=nl2br($entry->getPurpose())?> <br />
+            
+            <span class="label label-default">Other Concerns</span> <br /><?=nl2br($entry->getConcerns())?> <br />
+            </td>
+        </tr>
+        <?php $report = $entry->getReport();
+		if( !empty($report) ):?>
+        <tr><td colspan="2">
+        
+
+        <table class="table table-bordered">
+
+        <tr>
+        	<td colspan="2"><span class="label label-default">Report</span><br /><?=nl2br($entry->getReport())?>
+            <br />
+			<?php foreach($images as $image) :?>
+            <a href="/uploads/<?=$entry->getId()?>/<?=$image?>" target="_blank"><img width="250" class="img-responsive img-thumbnail" src="/uploads/<?=$entry->getId()?>/<?=$image?>" /></a>
+            <?php endforeach; ?>
+            </td>
+        </tr>
+        </table>
+
+        </td>
+        <?php endif; ?>
+        <tr>
+        	<td colspan="2">&nbsp;</td>
+        </tr>
+        
+        <tr><td colspan="2">
+        
+        <table class="table table-bordered">
+		<tr bgcolor="#666666">
+        	<td style="color:white;">Borrowing Items<br /></td>
+            <td align="center" style="color:white;">Borrowing QTY</td>
+            <!--<td style="color:white;">Current Stock</td>
+            <td style="color:white;">Stock After Approval</td>-->
+        </tr>
+        
+        
+		<?php
+			$error = array(); 
+			foreach( $entry->getBorrows() as $borrow) : 
+			
+		?>
+        <tr>
+        	<td><a href="<?=$this->url('request/action',array('action' => 'edit' , 'id' => $borrow->getId() ))?>"><?=$borrow->getInventory()?></a></td>
+            <td align="center"><span class="badge"><?=$borrow->getAmount()?></span></td>
+            <!--<td align="center"><span class="badge"><?=$borrow->getInventory()->getStock()?></span></td>
+            <td align="center"><span class="badge<?=($afterStock = $borrow->getInventory()->getStock() - $borrow->getAmount())<0?" badge-red":" badge-green"?>"><?=$afterStock?></span></td>-->
+        </tr>
+        
+        <?php 
+		/*if($afterStock<0) $error[] = $borrow->getInventory() . " is out of stock "; */
+		endforeach;
+		
+		#if(count($error)) $allowApproval = false;
+		#else $allowApproval = true;
+		
+		?>
+        </table>
+        </td></tr>
+        
+	</table>
+    </div>
+    <?php if(($entry->getStatus() == 'Pending' || $entry->getStatus() == 'Endorsed') && $entry->getStatus() != 'Declined') : ?>
+        
+        <?php if($this->isAllowed('event', 'decline') ) : ?>
+        <a href="<?=$this->url('event/action', array( 'action' => 'decline' , 'id' => $entry->getId() ))?>">
+        <span class="btn btn-lg btn-danger btn-block">
+            <i class="glyphicon glyphicon-check"></i>
+            <span>Decline this event</span>
+        </span></a><br />
+		<?php endif; ?>
+        
+        
+        <?php if($this->isAllowed('request', 'approve') /*&& $allowApproval*/) : ?>
+        <a href="<?=$this->url('event/action', array( 'action' => 'approve' , 'id' => $entry->getId() ))?>">
+        <span class="btn btn-lg btn-success btn-block">
+            <i class="glyphicon glyphicon-check"></i>
+            <span>Approve this event</span>
+        </span></a>
+		<?php else : ?>
+         <?php if($this->isAllowed('request', 'approve') && $allowApproval) : ?>
+        <div align="center" style="color:#900;"><?php foreach($error as $v) echo $v.'!<br />';?></div>
+        
+        <span class="btn btn-lg btn-danger btn-block">
+            <i class="glyphicon glyphicon-ban-circle"></i>
+            <span>Approval of this event is impossibruu</span>
+        </span>
+        <?php endif;?>
+        <?php endif;?>
+		
+		<?php if($roles[0] == 'secretary') :?>
+        <a href="<?=$this->url('event/action', array( 'action' => 'endorse' , 'id' => $entry->getId() ))?>">
+        <span class="btn btn-lg btn-warning btn-block">
+            <i class="glyphicon glyphicon-share"></i>
+            <span>Endorse</span>
+        </span></a>
+        <?php endif; ?>
+	<?php endif; ?>
+	</div>
+</div>

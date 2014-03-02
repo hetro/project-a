@@ -1,0 +1,31 @@
+<?php
+$title = 'Item Request';
+$this->headTitle($title);
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('inventory/action', array('action' => 'request' ) ));
+$form->prepare();
+/* Styling */
+
+$form->get('item-request')->get('inventory')->setAttribute('class','form-control')->setAttribute('placeholder','Item');
+$form->get('item-request')->get('amount')->setAttribute('class','form-control');
+$form->get('item-request')->get('description')->setAttribute('class','form-control');
+$form->get('item-request')->get('dateofreturn')->setAttribute('class','form-control')->setAttribute('id','dateofreturn')->setAttribute('placeholder','yy-mm-dd');
+?>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-4 col-sm-offset-4 shadow">
+    <center><h1><?=$title?></h1></center>
+    <?=$this->form()->openTag($form)?>
+    Item <?=$this->formRow($form->get('item-request')->get('inventory'))?>
+    Date of return <?=$this->formRow($form->get('item-request')->get('dateofreturn'))?>
+    Amount <?=$this->formRow($form->get('item-request')->get('amount'))?>
+    Description <?=$this->formRow($form->get('item-request')->get('description'))?>
+    <br /><input name="submit" type="submit" class="btn btn-lg btn-primary btn-block" /><br />
+    <?=$this->form()->closeTag()?>
+    </div>
+</div>
+
+<script>
+    $( "#dateofreturn" ).datepicker( { dateFormat:'yy-mm-dd'} );
+  </script>

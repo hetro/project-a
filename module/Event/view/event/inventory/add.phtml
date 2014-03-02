@@ -1,0 +1,28 @@
+<?php
+$title = 'Add Item';
+$this->headTitle($title);
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('inventory/action', array('action' => 'add' ) ));
+$form->prepare();
+/* Styling */
+
+$form->get('inventory')->get('name')->setAttribute('class','form-control')->setAttribute('placeholder','Name');
+$form->get('inventory')->get('stock')->setAttribute('class','form-control');
+$form->get('inventory')->get('type')->setAttribute('class','form-control');
+$form->get('inventory')->get('category')->setAttribute('class','form-control');
+$form->get('inventory')->get('description')->setAttribute('class','form-control');
+?>
+<div class="row">
+	<div class="col-xs-12 col-sm-4 col-sm-offset-4 shadow">
+    <center><h1 class="category-title"><?=$title?></h1></center>
+    <?=$this->form()->openTag($form)?>
+    Name <?=$this->formRow($form->get('inventory')->get('name'))?>
+    Category <?=$this->formRow($form->get('inventory')->get('category'))?>
+    Stock <?=$this->formRow($form->get('inventory')->get('stock'))?>
+    Type <?=$this->formRow($form->get('inventory')->get('type'))?>
+    Description <?=$this->formRow($form->get('inventory')->get('description'))?>
+    <br /><input name="submit" type="submit" class="btn btn-lg btn-primary btn-block" /><br />
+    <?=$this->form()->closeTag()?>
+    </div>
+</div>

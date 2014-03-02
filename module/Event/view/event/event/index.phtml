@@ -1,0 +1,30 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+    <?php if($this->isAllowed('event', 'request')) : ?>
+    <a href="<?=$this->url('event/action', array( 'action' => 'request'))?>">
+    <span class="btn btn-success fileinput-button btn-xs">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Request New Event</span>
+    </span></a>
+    <?php endif; ?>
+    <table class="table">
+  		<tr bgcolor="#444">
+        	<td style="color:white;">Name</td>
+            <td style="color:white;">Status</td>
+            <td style="color:white;">Start of Event</td>
+            <td style="color:white;">End of Event</td>
+        </tr>
+        <?php foreach($list as $entry) : ?>
+        <tr>
+        	<td><a href="<?=$this->url('event/action',array('action' => 'view', 'id' => $entry->getId() ))?>"><?=$entry->getEventTitle()?></a></td>
+            <td><span class="label <?php switch($entry->getStatus()){case "Approved": echo"label-success";break;case "Endorsed": echo"label-primary";break;default:echo"label-default";break;}?>"><?=$entry->getStatus()?></span></td>
+            <td><?=$entry->getStartOfEvent()->format('M d, Y h:iA')?>	
+            </td>
+            <td><?=$entry->getEndOfEvent()->format('M d, Y h:iA')?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+	</table>
+
+	</div>
+</div>

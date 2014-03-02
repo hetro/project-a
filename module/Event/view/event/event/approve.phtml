@@ -1,0 +1,22 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-6">
+<?php
+$title = 'Approve Event Request';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<p>Are you sure that you want to <code>approve</code> request for 
+    '<?php echo $request->getEventTitle(); ?>'?
+</p>
+<form action="<?=$this->url('event/action', array( 'action' => 'approve', 'id' => $request->getId() ))?>" method="post">
+<div>
+	<textarea placeholder="Notes (optional)" name="note" class="form-control"></textarea>
+    <br /><input class="btn btn-primary" type="submit" name="close" value="Yes" />
+    <input class="btn btn-warning"  type="submit" name="close" value="No" />
+    
+</div>
+</form>
+<br />
+</div>
+</div>

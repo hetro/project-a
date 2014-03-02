@@ -1,0 +1,57 @@
+<script src="/js/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery.datetimepicker.css"/>
+
+<script type="text/javascript">
+$(function(){
+	$('#startofevent').datetimepicker({format:'Y-m-d H:i',});
+	$('#endofevent').datetimepicker({format:'Y-m-d H:i',});	
+});
+</script>
+
+<?php
+$title = 'Add/Request Event';
+$this->headTitle($title);
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('event/action', array('action' => 'request' ) ));
+$form->prepare();
+/* Styling */
+
+$form->get('event')->get('eventtitle')->setAttribute('class','form-control');
+$form->get('event')->get('fullname')->setAttribute('class','form-control');
+$form->get('event')->get('company')->setAttribute('class','form-control');
+$form->get('event')->get('position')->setAttribute('class','form-control');
+$form->get('event')->get('address')->setAttribute('class','form-control');
+$form->get('event')->get('contact')->setAttribute('class','form-control');
+$form->get('event')->get('purpose')->setAttribute('class','form-control');
+$form->get('event')->get('venue')->setAttribute('class','form-control');
+$form->get('event')->get('concerns')->setAttribute('class','form-control');
+$form->get('event')->get('startofevent')->setAttribute('class','form-control')->setAttribute('id','startofevent');
+$form->get('event')->get('endofevent')->setAttribute('class','form-control')->setAttribute('id','endofevent');
+
+foreach($form->get('event')->get('borrows') as $k => $v){
+	$v->get('amount')->setAttribute('class','form-control')->setAttribute('placeholder','Qty');
+	$v->get('inventory')->setAttribute('class','form-control');
+}
+
+?>
+<div class="row">
+	<div class="col-xs-12 col-sm-6 col-sm-offset-3 shadow">
+    <center><h1><?=$title?></h1></center>
+    <?=$this->form()->openTag($form)?>
+    <?=$this->formRow($form->get('event')->get('startofevent'))?><?=$this->formRow($form->get('event')->get('endofevent'))?>
+<br />
+    Event Title <?=$this->formRow($form->get('event')->get('eventtitle'))?>
+    Fullname <?=$this->formRow($form->get('event')->get('fullname'))?>
+    Company <?=$this->formRow($form->get('event')->get('company'))?>
+    Position <?=$this->formRow($form->get('event')->get('position'))?>
+    Address <?=$this->formRow($form->get('event')->get('address'))?>
+    Contact <?=$this->formRow($form->get('event')->get('contact'))?>
+    Purpose <?=$this->formRow($form->get('event')->get('purpose'))?>
+    Venue <?=$this->formRow($form->get('event')->get('venue'))?>
+    Other Concerns <?=$this->formRow($form->get('event')->get('concerns'))?>
+    Borrow Items <?=$this->formRow($form->get('event')->get('borrows'))?>
+    <br /><input name="submit" type="submit" class="btn btn-lg btn-primary btn-block" /><br />
+    <?=$this->form()->closeTag()?>
+    </div>
+</div>

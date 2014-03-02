@@ -1,0 +1,138 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12">
+    <?php if($this->isAllowed('inventory', 'request')) : ?>
+    <a href="<?=$this->url('inventory/action', array( 'action' => 'request'))?>">
+    <span class="btn btn-success fileinput-button btn-xs">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Request Item</span>
+    </span></a>
+    <?php endif; ?>
+    <style>.table td{ border-right: 1px solid #ccc; }</style>
+    <table class="table table-bordered">
+  		<tr bgcolor="#444">
+        	<td style="color:white;">Event</td>
+            <td style="color:white;">Employee</td>
+            <td style="color:white;">Status</td>
+            <td style="color:white;">Reason / Note</td>
+            <td style="color:white;">Date of return</td>
+        	<td style="color:white;">Name</td>
+            <td style="color:white;">Description</td>
+            <td style="color:white;">Amount</td>
+            <td style="color:white;">Actions</td>
+        </tr>
+        <?php foreach($list as $entry) : ?>
+        <tr>
+        	<td><?php
+				$event = $entry->getEvent();
+            	if($event) : ?>
+                <a href="<?=$this->url('event/action' , array('action' => 'view', 'id' => $event->getId() ) )?>"><?=$event->getId().'#'.$event->getEventTitle()?></a>
+                <?php endif; ?>
+                </td>
+        	<td><?=$entry->getUser()->getDisplayName()?></td>
+            <td><?=$entry->getStatus()?></td>
+            <td><?=$entry->getNote()?></td>
+            <td><?=(is_object($entry->getDateOfReturn()))?$entry->getDateofreturn()->format('Y-m-d'):""?></td>
+            <td><?=$entry->getInventory()?></td>
+            <td><?=$entry->getDescription()?></td>
+            <td><?=$entry->getAmount()?></td>
+            <td>
+            <?php if($this->isAllowed('request', 'approve')) : ?>
+            <?php if($entry->getStatus() == 'Pending' && !$event) : ?>	
+                <span data-id="<?=$entry->getId()?>" class="btn-approve-request btn btn-success fileinput-button btn-xs">
+                <i class="glyphicon glyphicon-check"></i>
+                <span>Approve</span>
+            	</span>
+                <a href="<?=$this->url('request/action',array('action'=>'decline','id'=>$entry->getId()))?>">
+                <span data-id="<?=$entry->getId()?>" class="btn-decline-request btn btn-danger fileinput-button btn-xs">
+                <i class="glyphicon glyphicon-remove-circle"></i>
+                <span>Decline</span>
+            	</span></a>
+            <?php endif; ?>
+            <?php endif; ?>
+             <?php if($this->isAllowed('request', 'returnRequest')) : ?>
+            <?php if($entry->getStatus() == 'Approved' && !$event && $entry->getInventory()->getType() != 'Can be borrowed') : ?>	
+                <a href="<?=$this->url('request/action',array('action' => 'return', 'id' => $entry->getId() ))?>"><span data-id="<?=$entry->getId()?>" class="btn btn-success fileinput-button btn-xs">
+                <i class="glyphicon glyphicon-share-alt"></i>
+                <span>Set as returned</span>
+            	</span></a>
+            <?php endif; ?>
+            <?php endif; ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+	</table>
+    
+
+	</div>
+</div>
+
+<script type="application/javascript">
+$(function(){
+	
+	$(".btn-returned-request").click(
+		function(){
+			var requestid = $(this).data('id');
+			console.log(requestid);
+			//alert($(this).data('id'));
+			$.post('<?=$this->url('request/action',array('action' => 'returnRequest') )?>', { id : requestid },
+				function(data){
+					
+					if(data.error == '')
+					$( '<div title="Success"><span style="float:left">Item now has a status of <code>Returned</code></span></div>' ).dialog({
+						  modal: false,
+						  buttons: {
+							Ok: function() {
+							  $( this ).remove();
+							}
+						  }
+					});
+					else 
+					$( '<div title="error"><span>'+data.error+'</span></div>' ).dialog({
+						  modal: false,
+						  buttons: {
+							Ok: function() {
+							  $( this ).remove();
+							}
+						  }
+					});
+				}
+			,"json");
+			
+		}
+	);
+	
+	$(".btn-approve-request").click(
+		function(){
+			var requestid = $(this).data('id');
+			
+			//alert($(this).data('id'));
+			$.post('<?=$this->url('request/action',array('action' => 'approveRequest') )?>', { id : requestid },
+				function(data){
+					
+					if(data.error == ''){
+						$( '<div title="Success"><span class="ui-icon ui-icon-circle-check" style="float:left;margin-right:5px;"></span><span style="float:left">Approved Request</span></div>' ).dialog({
+							  modal: false,
+							  buttons: {
+								Ok: function() {
+								  $( this ).remove();
+								}
+							  }
+						});
+					}
+					else 
+					$( '<div title="error"><span>'+data.error+'</span></div>' ).dialog({
+						  modal: false,
+						  buttons: {
+							Ok: function() {
+							  $( this ).remove();
+							}
+						  }
+					});
+				}
+			,"json");
+			
+		}
+	);
+});
+
+</script>

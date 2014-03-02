@@ -1,0 +1,36 @@
+<div style="float:left; padding-right:16px;"><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()) ?></div>
+<h3><?php echo $this->translate('Hello'); ?>, <?php echo $this->zfcUserDisplayName() ?>!</h3>
+<a href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign Out'); ?>]</a>
+<div style="clear:both;"></div>
+
+
+<table class="table table-bordered">
+<tr bgcolor="#333333">
+	<td style="color:white">My Event Requests</td>
+    <td style="color:white">Status</td>
+    
+</tr>
+<?php foreach($list as $entry) : ?>
+<tr>
+	<td><a href="<?=$this->url('event/action',array('action' => 'view', 'id' => $entry->getId() ))?>"><?=$entry->getEventTitle()?></a></td>
+    <td><span class="label <?php switch($entry->getStatus()){case "Approved": echo"label-success";break;case "Endorsed": echo"label-primary";break;default:echo"label-default";break;}?>"><?=$entry->getStatus()?></span></td>
+    
+</tr>
+<?php endforeach; ?>
+</table>
+
+<table class="table table-bordered">
+<tr bgcolor="#333333">
+	<td style="color:white">My Item Requests</td>
+    <td style="color:white">Status</td>
+    <td style="color:white">Reviewed By</td>
+    
+</tr>
+<?php foreach($inventory as $entry) : ?>
+<tr>
+	<td><?=$entry->getInventory()?></td>
+    <td><span class="label <?php switch($entry->getStatus()){case "Approved": echo"label-success";break;case "Declined": echo"label-warning";break;default:echo"label-default";break;}?>"><?=$entry->getStatus()?></span></td>
+    <td><?=(is_object($entry->getReviewedBy())?$entry->getReviewedBy()->getDisplayName():"")?></td>
+</tr>
+<?php endforeach; ?>
+</table>

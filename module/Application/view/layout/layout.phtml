@@ -1,0 +1,105 @@
+<?php echo $this->doctype(); ?>
+<?php
+$systemTitle = 'Event Manager';
+?>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle($systemTitle)->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                        ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+						->prependStylesheet($this->basePath() . '/css/smoothness/jquery-ui-1.10.4.custom.min.css') ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()
+			->prependFile($this->basePath() . '/js/jquery-ui-1.10.3.custom.min.js')
+            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+            ->prependFile($this->basePath() . '/js/jquery.min.js')
+            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+        ; ?>
+
+    </head>
+    <style>
+    #main-header {
+		top:0;
+		background: url(/img/bgimg4.jpg) bottom no-repeat;	
+	}
+	.navbar-nav>li>a {
+		color:white;
+	}
+	.navbar-nav>li>a:hover {
+		color:#333;
+	}
+    </style>
+    <body>
+        
+        <div id="main-header">
+	<div style=" float:left; display:inline-block; height:108px; width:10%; border:1px thin black;">
+    </div>
+    <div style="display:inline-block; position:absolute; width:12%; height:160px;  border:1px thin black;"><img src="/img/PGAseal.png" width="165" height="162" style="float:left; ">
+    </div>
+    <div style=" display:inline-block; height:110px; width:80%; border:1px thin black; margin:0;"><div style="display:inline-block; margin-left: 160px; height:70px; width:100%; border:1px thin black;"><h1>CCA</h1></div>
+    <div style="display:inline-block; height:20px; margin-left: 160px; border:1px thin black;"><h2>Climate Change Academy</h2></div>
+    
+    </div>
+    
+ 	
+<div>
+	<div style=" float:left; display:inline-block; height:50px; width:25%; border:1px thin black;">
+    </div>
+    </div>
+    <div style="display:inline-block; height:42px; width:74.5%; border:1px thin black;">
+    	<div style="display:inline-block; float:left; width:3%; height:42px; border:1px thin black; "></div>
+       <div class="header">
+       <?php echo $this->navigation('navigation')->menu()->setUlClass('nav navbar-nav'); ?>
+       <ul class="nav navbar-nav navbar-right" style="margin-right:85px;">
+      
+						<?php if(!$this->zfcUserIdentity()): ?>
+                        <li><a href="<?php echo $this->url('zfcuser/login') ?>"><center><?php echo $this->translate('Sign In') ?></center></a></li>
+                        <?php else: ?>
+                        <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->zfcUserDisplayName()?> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        <li><a href="<?=$this->url('notifications' )?>">Notifications <span class="badge badge-red"><?=$notifications_count?></span></a></li>
+                         <li><a href="<?=$this->url('zfcuser')?>">My Account</a></li>
+                         
+                          
+                          <li class="divider"></li>
+                          <li><a class="home_sign_out" href="<?php echo $this->url('zfcuser/logout') ?>"><?php echo $this->translate('Sign Out'); ?></a></li>
+                        </ul>
+                        </li>
+                        <?php endif; ?>
+                        <?php if(!$this->zfcUserIdentity()): ?>
+                        <div class="navbar-form navbar-left">
+                            <a class="navbar-link" href="<?php echo $this->url('zfcuser/register') ?>"><button class="form-control home_sign_in"><?php echo $this->translate('Create Account') ?></button></a>
+                          </div>                    
+                        <?php endif ?>
+                        
+                        
+       </ul>
+       </div>
+       
+       
+    </div>
+   
+</div>	<div style="clear:both;"></div>
+        <div class="container">
+            <?php echo $this->content; ?>
+            <hr>
+            <footer>
+                <p>&copy; 2005 - <?php echo date('Y') ?> by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
+            </footer>
+        </div> <!-- /container -->
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

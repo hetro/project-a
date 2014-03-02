@@ -1,0 +1,20 @@
+<table class="table table-bordered">
+<tr bgcolor="#333333">
+	<td style="color:white">User</td>
+    <td style="color:white">Actions</td>
+</tr>
+<?php foreach($accounts as $user) : ?>
+	<tr>
+    	<td><?=$user->getUserId()?>#<?=$user->getEmail()?></td>
+        <td><div class="btn-group">
+              <button type="button" class="btn btn-xs btn-danger dropdown-toggle" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-cog"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li style="text-align:left"><a href="<?=$this->url('super/action', array('action' => 'update-account', 'id' => $user->getUserId() ))?>">Modify</a></li>
+                <li style="text-align:left"><a href="<?=$this->url('super/action', array('action' => 'delete-account', 'id' => $user->getUserId() ))?>">Delete Account</a></li>
+              </ul>
+            </div></td>
+    </tr>
+<?php endforeach; ?>
+</table>

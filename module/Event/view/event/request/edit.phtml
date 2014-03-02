@@ -1,0 +1,20 @@
+
+<?php
+$title = 'Update Qty Request for '.$request->getInventory();
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<div class="row">
+	<div class="col-xs-12 col-sm-3">
+
+<form action="<?=$this->url('request/action', array( 'action' => 'edit', 'id' => $request->getId() ))?>" method="post">
+<div>
+	<input type="text" name="amount" value="<?=$request->getAmount()?>" class="form-control"/>
+    <br /><input class="btn btn-primary" type="submit" name="update" value="Update" />
+    <input class="btn btn-warning"  type="submit" name="update" value="Cancel" />
+    
+</div>
+</form>
+<br />
+</div>
+</div>

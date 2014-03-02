@@ -1,0 +1,28 @@
+<?php
+$title = 'Updating Account '.$user->getEmail();
+$this->headTitle($title);
+?>
+<center>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+</center>
+<div class="row">
+	<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+
+
+<form action="" method="post">
+<div>
+	<select name="user_role" class="form-control">
+	<?php foreach($user_role as $k => $v) : ?>
+    		<option value="<?=$v['is_default']?>" <?=($v['is_default']==$role_id?'selected="selected"':'')?>><?=$v['role_id']?></option>
+    <?php endforeach;?>
+    </select>
+    
+    <br /><input class="btn btn-primary" type="submit" name="update" value="Update" />
+    <input class="btn btn-warning"  type="submit" name="update" value="Cancel" />
+    
+</div>
+</form>
+<br />
+</div>
+</div>

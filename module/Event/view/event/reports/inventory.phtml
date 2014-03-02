@@ -1,0 +1,56 @@
+<?php $this->headScript()->prependFile($this->basePath() . '/js/jquery.print.js')?>
+<form method="post" action="">
+<input type="text" id="start" name="start" placeholder="Starting date" value="<?=(isset($_POST['start'])?$_POST['start']:"")?>"/>
+<input type="text" id="end" name="end" placeholder="Ending date" value="<?=(isset($_POST['end'])?$_POST['end']:"")?>"/>
+<select name="category">
+	<option value="Janitorial" <?=isset($_POST['category'])?($_POST['category']=="Janitorial"?'selected="selected"':""):""?>>Janitorial</option>
+    <option value="Office Supplies" <?=isset($_POST['category'])?($_POST['category']=="Office Supplies"?'selected="selected"':""):""?>>Office Supplies</option>
+    <option value="Furnitures" <?=isset($_POST['category'])?($_POST['category']=="Furnitures"?'selected="selected"':""):""?>>Furnitures</option>
+    <option value="Equipments" <?=isset($_POST['category'])?($_POST['category']=="Equipments"?'selected="selected"':""):""?>>Equipments</option>
+</select>
+<button type="submit">Submit</button>
+<button id="print">Print</button>
+</form>
+<br />
+<div class="printable">
+<?php
+if(!empty($dates['start']) && !empty($dates['end'])) 
+{
+echo $dates['start'].' to '.$dates['end'];
+
+echo ' | Category: '.$_POST['category'];
+}
+?>
+<table class="table">
+	<tr bgcolor="#333333">
+    	<td style="color:white">Item Name</td>
+        <?php if(!$hide) :?>
+        <td style="color:white">Category</td>
+        <?php endif; ?>
+        <td style="color:white">Starting Stock</td>
+        <td style="color:white">Ending Stock</td>
+    </tr>
+    <?php if(!count($list)) : ?>
+    <tr>
+    	<td colspan="4"><span class="label label-warning">No result</span></td>
+    </tr>
+    <?php endif; ?>
+<?php foreach($list as $inventory) :?>
+	<tr>
+    	<td><?=$inventory['name']?></td>
+        <?php if(!$hide) :?>
+        <td><?=$inventory['category']?></td>
+        <?php endif; ?>
+        <td><?=($inventory['currentstock']==NULL&&!is_integer($inventory['currentstock'])?$inventory['stock']:$inventory['currentstock'])?></td>
+        <td><?=($inventory['endstock']==NULL&&!is_integer($inventory['endstock'])?$inventory['stock']:$inventory['endstock'])?></td>
+    </tr>
+<?php endforeach; ?>
+</table>
+
+</div>
+<script type="text/javascript">
+$("#start").datepicker({dateFormat:'yy-mm-dd'});
+$("#end").datepicker({dateFormat:'yy-mm-dd'});
+
+$("#print").click(function(e){e.preventDefault();	$(".printable").print()});
+</script>

@@ -1,0 +1,24 @@
+<?php
+$title = 'Return items '.$entry->getInventory();
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?=$entry->getDescription()?><br><br>
+<div class="row">
+	<div class="col-xs-12 col-sm-4">
+	<?php foreach($error as $k => $v):?>
+<span class="label label-danger"><?=$v?></span>
+<?php endforeach; ?>
+<form action="" method="post">
+<div>
+	
+    <input type="text" placeholder="Amount" name="amount" class="form-control" value="<?=$entry->getAmount()?>" />
+    
+    <br /><input class="btn btn-primary" type="submit" name="update" value="Set as returned" />
+    <input class="btn btn-warning"  type="submit" name="update" value="Cancel" />
+    
+</div>
+</form>
+<br />
+</div>
+</div>

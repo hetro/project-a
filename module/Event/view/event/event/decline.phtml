@@ -1,0 +1,21 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-4">
+<?php
+$title = 'Decline Request';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<p>Are you sure that you want to <code>decline</code> this request?
+</p>
+<form action="<?=$this->url('event/action', array( 'action' => 'decline', 'id' => $request->getId() ))?>" method="post">
+<div>
+
+    <br /><input class="btn btn-primary" type="submit" name="close" value="Yes" />
+    <input class="btn btn-warning"  type="submit" name="close" value="No" />
+    
+</div>
+</form>
+<br />
+</div>
+</div>

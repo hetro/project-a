@@ -1,0 +1,38 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+    
+    
+    <?php if($this->isAllowed('inventory', 'request')) : ?>
+    <a href="<?=$this->url('inventory/action', array( 'action' => 'update-stock' , 'id' => $entry->getId() ))?>">
+    <span class="btn btn-success fileinput-button btn-xs">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Update Stock</span>
+    </span></a>
+    <?php endif; ?>
+    <table class="table">
+    	<tr>
+        	<td colspan="2"><?=$entry->getName()?></td>
+            <td align="right">Current Stock <span class="badge"><?=$entry->getStock()?></span></td>
+        </tr>
+        <tr>
+            <td>
+
+            <strong>Description </strong><br />
+			<?=nl2br($entry->getDescription())?></td>
+        	<td colspan="2">
+            <strong>Category </strong><br />
+            <?=$entry->getCategory()?></td>
+        </tr>
+        <tr  bgcolor="#444">
+        <td style="color:white;" colspan="3">Logs</td></tr>
+        <?php foreach($logs as $log) :?>
+        <tr>
+        <td><?=$log->getDate()->format('M j,y H:i:s')?></td>
+        <td><?=$log->getDescription()?></td>
+        <td align="right"><span class="badge <?=($log->getStock()<0?'badge-red':'badge-green')?>"><?=($log->getStock()<0?'':'+')?><?=$log->getStock()?></span></td>
+        </tr>
+		<?php endforeach; ?>
+	</table>
+
+	</div>
+</div>

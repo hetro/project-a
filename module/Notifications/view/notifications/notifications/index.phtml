@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Notifications</h3>
+            </div>
+            <div class="panel-body">
+            	<?php if(!count($notifications)) : ?>
+                <div class="alert alert-success">No issues so far</div>
+                <?php endif; ?>
+                <?php foreach($notifications as $v) :
+					$tmp = $v->getLinkroute();
+					$linkroute = explode(':',$tmp);
+					if(!empty($tmp)) :
+				?>
+				<div class="alert alert-danger">
+                	<?php if($linkroute[1] == 'returnRequest') :?>
+                    	<?=$v->getMessage()?> <span data-notificationid="<?=$v->getId()?>" data-id="<?=$linkroute[2]?>" class="btn-returned-request btn btn-success fileinput-button btn-xs">
+                <i class="glyphicon glyphicon-share-alt"></i>
+                <span>Set as returned</span>
+            	</span>
+                    <?php else : ?>
+                    <a href="<?=$this->url($linkroute[0].'/action',array('action' => $linkroute[1], 'id' => $linkroute[2]))?>">
+                	<?=$v->getMessage()?>
+                    <!--<span class="btn btn-success btn-xs">
+                    <i class="glyphicon glyphicon-edit"></i>
+                    <span>Update Stock</span>
+                    </span></a>-->
+                    <?php endif; ?>
+                    
+                </div>
+                <?php else : ?>
+                	<div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-id="<?=$v->getId()?>" data-dismiss="alert" aria-hidden="true">&times;</button>
+                	<?=$v->getMessage()?>
+                    </div>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+<br />
+<script type="application/javascript">
+$(function(){
+	
+	
+	$(".alert-dismissable > button").click(
+		function(){
+			var notificationid = $(this).data('id');
+			$.post('<?=$this->url('notifications/action',array('action' => 'delete') )?>', { id : notificationid },"json");
+		}
+	);
+	
+	
+	$(".btn-returned-request").click(
+		function(){
+			var requestid = $(this).data('id');
+			var notificationid = $(this).data('notificationid');
+			//alert($(this).data('id'));
+			$.post('<?=$this->url('request/action',array('action' => 'returnRequest') )?>', { id : requestid },
+				function(data){
+					
+					if(data.status == 'Returned'){
+						$( '<div title="Success"><span style="float:left">Item now has a status of <code>Returned</code></span></div>' ).dialog({
+							  modal: false,
+							  buttons: {
+								Ok: function() {
+								  $( this ).remove();
+								}
+							  }
+						});
+						
+					}
+					else 
+					$( '<div title="error"><span>'+data.error+'</span></div>' ).dialog({
+						  modal: false,
+						  buttons: {
+							Ok: function() {
+							  $( this ).remove();
+							}
+						  }
+					});
+				}
+			,"json");
+			
+		}
+	);
+});
+
+</script>
